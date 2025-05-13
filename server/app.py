@@ -5,13 +5,14 @@ import numpy as np
 import io
 
 app = Flask(__name__)
-CORS(app)  # Allow cross-origin requests from your React frontend
+CORS(app, resources={r"/predict": {"origins": "http://localhost:3000"}}) # Allow cross-origin requests from your React frontend
 
 # Mock class labels
 class_names = ['Healthy', 'Deficient', 'Diseased']
 
 @app.route('/predict', methods=['POST'])
 def predict():
+
     # Get the image file from the request
     file = request.files['image']
     image = Image.open(file.stream).resize((224, 224))
