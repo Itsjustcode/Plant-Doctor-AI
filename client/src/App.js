@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 
 function App() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -51,7 +56,30 @@ function App() {
       {predictionResult && (
         <div style={{ marginTop: "2rem" }}>
           <h3>Prediction: {predictionResult.label}</h3>
-          <pre>{JSON.stringify(predictionResult.confidence, null, 2)}</pre>
+
+          <div style={{ width: "300px", margin: "1rem auto" }}>
+            <Pie
+              data={{
+                labels: Object.keys(predictionResult.confidence),
+                datasets: [
+                  {
+                    label: "Confidence",
+                    data: Object.values(predictionResult.confidence),
+                    backgroundColor: ["#28a745", "#ffc107", "#dc3545"], // green, yellow, red
+                    borderColor: "#fff",
+                    borderWidth: 1,
+                  },
+                ],
+              }}
+              options={{
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
+                },
+              }}
+            />
+          </div>
         </div>
       )}
     </div>
